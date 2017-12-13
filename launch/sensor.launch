@@ -1,0 +1,27 @@
+<launch>
+<!-- 3D sensor -->
+<arg name="3d_sensor" default="$(env TURTLEBOT_3D_SENSOR)"/>  <!-- r200, kinect, asus_xtion_pro -->
+<include file="$(find turtlebot_bringup)/launch/3dsensor.launch">
+  <arg name="depth_registration" value="false" />
+  <arg name="depth_processing" value="false" />
+  <arg name="ir_processing"    value="false"/>
+  <arg name="depth_registered_processing" value="false"/>
+
+  <!-- We must specify an absolute topic name because if not it will be prefixed by "$(arg camera)".
+       Probably is a bug in the nodelet manager: https://github.com/ros/nodelet_core/issues/7 -->
+  <arg name="scan_topic" value="kinect_scan" />
+</include>
+
+<!--hokuyo-->
+<!--配置了相应的激光数据base  与 topic -->
+<arg name="2dsensor"  default="$(optenv SENSOR_2D hokuyo)"/>
+<!-- rplidar, hokuyo -->
+<!--arg name="use_filter" default="$(optenv USE_FILTER false)"/-->
+
+<include file="$(find turtlebot_bringup)/launch/includes/$(arg 2dsensor)_2d_sensor.launch.xml">
+<arg name="scan_topic" value="/scan" />
+<arg name="laser_frame" value="camera_depth_frame" />
+<!-- if need change port -->
+<!--arg name="laser_port" value="/dev/ttyACM0" /-->
+</include>
+</launch>

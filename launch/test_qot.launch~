@@ -1,0 +1,19 @@
+<launch>
+
+<!--首先启动手柄的节点-->
+  <node pkg="turtlebot_teleop" type="turtlebot_teleop_joy" name="turtlebot_teleop_joystick">
+    <param name="scale_angular" value="1"/>
+    <param name="scale_linear" value="2"/>
+    <param name="axis_deadman" value="7"/>
+    <remap from="turtlebot_teleop_joystick/cmd_vel" to="teleop_velocity_smoother/raw_cmd_vel"/>
+  </node>
+
+  <node pkg="joy" type="joy_node" name="joystick"/>
+
+<!--rviz-->
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find turtlebot_rviz_launchers)/rviz/navigation.rviz"/>
+ 
+<!--rqt_graph-->
+  <node pkg="rqt_bag" type="rqt_bag" name="rqt_bag" />
+
+</launch>

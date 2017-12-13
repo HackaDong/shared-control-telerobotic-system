@@ -1,0 +1,33 @@
+<launch>
+
+<!--首先启动手柄的节点
+  <node pkg="turtlebot_teleop" type="turtlebot_teleop_joy" name="turtlebot_teleop_joystick">
+    <param name="scale_angular" value="1.5"/>
+    <param name="scale_linear" value="0.5"/>
+    <param name="axis_deadman" value="7"/>
+    <remap from="turtlebot_teleop_joystick/cmd_vel" to="teleop_velocity_smoother/raw_cmd_vel"/>
+  </node>
+
+  <node pkg="joy" type="joy_node" name="joystick"/>-->
+
+<!--远程socket节点-->
+  <node pkg="rosserial_server" type="socket_node" name="rosserial_server" />
+  <node pkg="rosserial_python" type="message_info_service.py" name="rosserial_message_info" />
+
+<!--rviz
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find turtlebot_rviz_launchers)/rviz/navigation.rviz"/>
+-->
+<!--rqt_graph
+  <node pkg="rqt_graph" type="rqt_graph" name="rqt_graph" />-->
+ 
+<!--rqt_bag-->
+  <node pkg="rqt_bag" type="rqt_bag" name="rqt_bag" />
+
+<!--composite节点-->
+<include file="$(find experiment1)/velocity_smoother.launch.xml"/>
+
+  <node pkg="experiment1" type="composite_cmd_vel" name="experiment1">
+    <remap from="sharecontrol" to="shared_control_velocity_smoother/raw_cmd_vel"/>
+  </node>
+  
+</launch>
